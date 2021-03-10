@@ -17,9 +17,7 @@ Full example:
 ```Dockerfile 
 FROM debian:stretch-slim
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -y php-fpm
-RUN apt-get install -y php-ldap php-curl php-mbstring php-cas
+RUN apt-get update && apt-get install -y php-fpm php-ldap php-curl php-mbstring php-cas
 COPY php-fpm.conf /etc/php/7.0/fpm/pool.d/www.conf
 ENTRYPOINT ["php-fpm7.0"]
 ```
