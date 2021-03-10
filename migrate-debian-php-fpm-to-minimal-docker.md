@@ -1,6 +1,7 @@
 Here is a minimal migration from debian host PHP-FPM to docker, with
 * no networking complexity/mess: use host network. (when you do not want your container to use a new IP)
 * manual handling of FPM listen ports is tedious, better keep using UNIX socket.
+* keep using host mysql through UNIX socket: simply pass the socket to the container
 
 Full example:
 
@@ -55,6 +56,7 @@ docker run -d --restart unless-stopped \
   --volume="/etc/group:/etc/group:ro" \
   --volume="/etc/passwd:/etc/passwd:ro" \
   --volume="/etc/shadow:/etc/shadow:ro" \
+  --volume="/var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock" \  
   --volume="/webhome/foo/www:/webhome/foo/www" \
   --volume="/webhome/foo/.run:/run/php" \
   --volume="/var/lib/php/sessions-foo:/var/lib/php/sessions" \
