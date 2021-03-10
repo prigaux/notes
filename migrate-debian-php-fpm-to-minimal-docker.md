@@ -41,7 +41,7 @@ pm.min_spare_servers = 1
 pm.max_spare_servers = 3
 ```
 
-* to deploy ([host user to container](https://medium.com/faun/set-current-host-user-for-docker-container-4e521cef9ffc))
+* to deploy (with [container using host user](https://medium.com/faun/set-current-host-user-for-docker-container-4e521cef9ffc))
 
 ```sh
 docker build --network=host -t foo .
