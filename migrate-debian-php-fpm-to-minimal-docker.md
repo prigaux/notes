@@ -47,7 +47,7 @@ pm.max_spare_servers = 3
 docker build --network=host -t foo .
 
 # ensure directories exist
-install -d -o fpm /run/php-foo /var/lib/php/sessions-foo
+install -d -o fpm /webhome/foo/.run /var/lib/php/sessions-foo
 
 docker run -d --restart unless-stopped \
   --network host \
