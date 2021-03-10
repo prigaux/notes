@@ -1,6 +1,6 @@
 Here is a minimal migration from debian host PHP-FPM to docker, with
-* no networking complexity/mess: use host network when you do not want your container to use a new IP.
-* manual handling of FPM listen ports is tedious, better continue to use UNIX socket.
+* no networking complexity/mess: use host network. (when you do not want your container to use a new IP)
+* manual handling of FPM listen ports is tedious, better keep using UNIX socket.
 
 Full example:
 
