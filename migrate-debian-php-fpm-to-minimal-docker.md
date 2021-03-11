@@ -73,3 +73,14 @@ docker container rm wsgroups -f
 After=mariadb.service
 ```
 
+* crons and docker is not easy. 
+  * debian uses a cron for php sessionclean.
+  * either create `/etc/cron.d/dockers-php-sessionclean` with
+```
+09,39 *     * * *     root   find -O3 /var/lib/php/sessions* -ignore_readdir_race -depth -mindepth 1 -name 'sess_*' -type f -cmin +24 -delete
+```
+  * or create `/etc/php/7.0/fpm/conf.d/docker-reenable-sessions-gc.ini` with
+```ini
+[Sessions]
+session.gc_probability = 1
+```
