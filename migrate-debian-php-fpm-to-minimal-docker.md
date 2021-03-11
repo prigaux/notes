@@ -54,7 +54,7 @@ docker run -d --restart unless-stopped \
   --volume="/etc/group:/etc/group:ro" \
   --volume="/etc/passwd:/etc/passwd:ro" \
   --volume="/etc/shadow:/etc/shadow:ro" \
-  --volume="/var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock" \  
+  --volume="/var/run/mysqld:/var/run/mysqld" \  
   --volume="/webhome/foo/www:/webhome/foo/www" \
   --volume="/webhome/foo/.run:/run/php" \
   --volume="/var/lib/php/sessions-foo:/var/lib/php/sessions" \
