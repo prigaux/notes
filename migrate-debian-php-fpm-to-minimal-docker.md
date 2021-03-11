@@ -5,7 +5,11 @@ Here is a minimal migration from debian host PHP-FPM to docker, with
 
 Full example:
 
-* /etc/docker/daemon.json [to disable bridge](https://stackoverflow.com/questions/52146056/how-to-delete-disable-docker0-bridge-on-docker-startup)
+### disable docker bridge
+
+([ref](https://stackoverflow.com/questions/52146056/how-to-delete-disable-docker0-bridge-on-docker-startup))
+
+create /etc/docker/daemon.json :
 ```json
 {
     "iptables": false,
@@ -13,7 +17,8 @@ Full example:
 }
 ```
 
-* Dockerfile
+### Dockerfile
+
 ```Dockerfile 
 FROM debian:stretch-slim
 ARG DEBIAN_FRONTEND=noninteractive
@@ -22,7 +27,10 @@ COPY php-fpm.conf /etc/php/7.0/fpm/pool.d/www.conf
 ENTRYPOINT ["php-fpm7.0"]
 ```
 
-* php-fpm.conf ([ref](https://serverfault.com/questions/658367/how-to-get-php-fpm-to-log-to-stdout-stderr-when-running-in-a-docker-container))
+### php-fpm.conf
+
+([ref](https://serverfault.com/questions/658367/how-to-get-php-fpm-to-log-to-stdout-stderr-when-running-in-a-docker-container))
+ 
 ```ini
 [global]
 error_log = /proc/self/fd/2
@@ -40,7 +48,9 @@ pm.min_spare_servers = 1
 pm.max_spare_servers = 3
 ```
 
-* to deploy (with [container using host user](https://medium.com/faun/set-current-host-user-for-docker-container-4e521cef9ffc))
+### to deploy
+
+(with [container using host user](https://medium.com/faun/set-current-host-user-for-docker-container-4e521cef9ffc))
 
 ```sh
 docker build --network=host -t foo .
@@ -61,25 +71,34 @@ docker run -d --restart unless-stopped \
   --name foo foo
 ```
 
-* to update, run the following and deploy again
+### to update
+
+run the following and deploy again
 ```sh
 docker container rm wsgroups -f
 ```
 
-* if one container relies on host mysql, you must ensure /var/run/mysqld is created before docker restart the containers on boot. With systemd, create /etc/systemd/system/docker.service.d/need-mysql.conf
+### on boot
+
+if one container relies on host mysql, you must ensure /var/run/mysqld is created before docker restart the containers on boot. With systemd, create /etc/systemd/system/docker.service.d/need-mysql.conf
 ```ini
 [Unit]
 # ensure /var/run/mysqld is created
 After=mariadb.service
 ```
 
-* crons and docker is not easy. 
-  * debian uses a cron for php sessionclean.
-  * either create `/etc/cron.d/dockers-php-sessionclean` with
+### crons
+
+crons and docker is not easy. 
+
+#### debian uses a cron for php sessionclean
+
+either create `/etc/cron.d/dockers-php-sessionclean` with
 ```
 09,39 *     * * *     root   find -O3 /var/lib/php/sessions* -ignore_readdir_race -depth -mindepth 1 -name 'sess_*' -type f -cmin +24 -delete
 ```
-  * or create `/etc/php/7.0/fpm/conf.d/docker-reenable-sessions-gc.ini` with
+
+or create `/etc/php/7.0/fpm/conf.d/docker-reenable-sessions-gc.ini` with
 ```ini
 [Sessions]
 session.gc_probability = 1
