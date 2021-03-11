@@ -103,3 +103,20 @@ or create `/etc/php/7.0/fpm/conf.d/docker-reenable-sessions-gc.ini` with
 [Sessions]
 session.gc_probability = 1
 ```
+
+### mails
+
+PHP often rely on PHP [mail](https://php.net/manual/en/function.mail.php) or sendmail binary.
+
+Postfix is no good inside a container (it relies on a daemon, setuid binary...)
+
+A simple solution is to use [msmtp](https://marlam.de/msmtp/) which sends mails to a SMTP server (for example the host postfix configured with `inet_interfaces = 127.0.0.1` and `smtpd_relay_restrictions = permit_mynetworks, reject`)
+
+install [`msmtp-mta`](https://packages.debian.org/stable/msmtp-mta)
+in the image, add `/etc/msmtprc` with:
+```
+defaults
+account default
+host localhost
+from no-reply@foo.com
+```
