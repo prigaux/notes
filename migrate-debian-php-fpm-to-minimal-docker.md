@@ -65,3 +65,11 @@ docker run -d --restart unless-stopped \
 ```sh
 docker container rm wsgroups -f
 ```
+
+* if one container relies on host mysql, you must ensure /var/run/mysqld is created before docker restart the containers on boot. With systemd, create /etc/systemd/system/docker.service.d/need-mysql.conf
+```ini
+[Unit]
+# ensure /var/run/mysqld is created
+After=mariadb.service
+```
+
