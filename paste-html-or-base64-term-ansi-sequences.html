@@ -16,8 +16,7 @@
     </style>
 </head>
 <body>
-    <span autofocus id="target" contenteditable="true" spellcheck="false">Paste here (html or base64 html)</span>
-    <!--div id="test"></div-->
+    <span autofocus id="target" contenteditable="true" spellcheck="false">Paste here (html or base64 term ansi sequences)</span>
 <script>
 
 const target = document.getElementById('target');
@@ -26,7 +25,9 @@ target.addEventListener('paste', (event) => {
     let html = event.clipboardData.getData('text/html');
     if (!html) {
         const text = event.clipboardData.getData('text');
-        html = "<pre>" + base64_ansi_to_html(text) + "</pre>";
+        // useful with the following git alias
+        //   diff-b64 = "!f() { git diff $@ --color | base64 -w0 && echo; }; f"
+        html = "<pre>" + simplify_git_diff_header(base64_ansi_to_html(text)) + "</pre>";
     }
     target.innerHTML = html;
     target.contentEditable = false;
@@ -41,10 +42,10 @@ window.onload = () => { target.focus() }
 const b64_to_utf8 = str => decodeURIComponent(escape(window.atob( str )))
 const escape_html = (str) => str.replace(/[&<>"']/g, (e) => "&#" + e.charCodeAt(0) + ";")
 const base64_ansi_to_html = b64 => ansi2html(escape_html(b64_to_utf8(b64)))
+const simplify_git_diff_header = html => html.replace(/^<span[^>]*>(index|diff --git).*\n/mg, '')
 
 //const test_base64 = '';
-//target.innerHTML = "<pre>" + base64_ansi_to_html(test_base64) + "</pre>";
-//document.getElementById("test").innerText = target.innerHTML;
+//target.innerHTML = "<pre>" + simplify_git_diff_header(base64_ansi_to_html(test_base64)) + "</pre>";
 
 
 // from https://github.com/agnoster/ansi2html
@@ -113,7 +114,7 @@ function ansi2html(str) {
       return html
     }
 
-    return str.replace(/\[(\d+;)?(\d+)*m/g, (_match, b1, b2) => (
+    return str.replace(/\x1B\[(\d+;)?(\d+)?m/g, (_match, b1, b2) => (
       open_close_tags(parseInt(b1)) + open_close_tags(b2 == '' || b2 == null ? 0 : parseInt(b2))
     )) + open_close_tags()
   }
