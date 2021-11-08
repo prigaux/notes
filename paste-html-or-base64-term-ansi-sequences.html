@@ -9,9 +9,12 @@
             background-color: black;
             color: white;
             border: 1px solid white;
-            padding: 1rem;
+            padding: 0.5rem;
             min-width: 20rem;
             min-height: 5rem;
+        }
+        #target > pre {
+            margin: 0;
         }
     </style>
 </head>
@@ -69,7 +72,7 @@ function ansi2html(str) {
     , 29: { strikethrough: false }
     , 30: { color: 'black' }
     , 31: { color: 'red' }
-    , 32: { color: 'green' }
+    , 32: { color: '#00cd00' }
     , 33: { color: 'yellow' }
     , 34: { color: 'blue' }
     , 35: { color: 'magenta' }
