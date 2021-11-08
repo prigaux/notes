@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #target {
+            display: inline-block;
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 1rem;
+            min-width: 20rem;
+            min-height: 5rem;
+        }
+    </style>
+</head>
+<body>
+    <span autofocus id="target" contenteditable="true" spellcheck="false">Paste here (html or base64 html)</span>
+    <!--div id="test"></div-->
+<script>
+
+const target = document.getElementById('target');
+
+target.addEventListener('paste', (event) => {
+    let html = event.clipboardData.getData('text/html');
+    if (!html) {
+        const text = event.clipboardData.getData('text');
+        html = "<pre>" + base64_ansi_to_html(text) + "</pre>";
+    }
+    target.innerHTML = html;
+    target.contentEditable = false;
+
+    event.preventDefault();
+});
+
+window.onload = () => { target.focus() }
+
+
+
+const b64_to_utf8 = str => decodeURIComponent(escape(window.atob( str )))
+const escape_html = (str) => str.replace(/[&<>"']/g, (e) => "&#" + e.charCodeAt(0) + ";")
+const base64_ansi_to_html = b64 => ansi2html(escape_html(b64_to_utf8(b64)))
+
+//const test_base64 = '';
+//target.innerHTML = "<pre>" + base64_ansi_to_html(test_base64) + "</pre>";
+//document.getElementById("test").innerText = target.innerHTML;
+
+
+// from https://github.com/agnoster/ansi2html
+function ansi2html(str) {
+  const stylemap = { bold: "font-weight" , underline: "text-decoration" , color: "color" , background: "background" }
+
+  /* not implemented: italic blink invert strikethrough */
+  const code2props =
+    { 0: null
+    , 1: { bold: true }
+    , 3: { italic: true }
+    , 4: { underline: true }
+    , 5: { blink: true }
+    , 6: { blink: true }
+    , 7: { invert: true }
+    , 9: { strikethrough: true }
+    , 23: { italic: false }
+    , 24: { underline: false }
+    , 25: { blink: false }
+    , 27: { invert: false }
+    , 29: { strikethrough: false }
+    , 30: { color: 'black' }
+    , 31: { color: 'red' }
+    , 32: { color: 'green' }
+    , 33: { color: 'yellow' }
+    , 34: { color: 'blue' }
+    , 35: { color: 'magenta' }
+    , 36: { color: 'cyan' }
+    , 37: { color: 'white' }
+    , 39: { color: null }
+    , 40: { background: 'black' }
+    , 41: { background: 'red' }
+    , 42: { background: 'green' }
+    , 43: { background: 'yellow' }
+    , 44: { background: 'blue' }
+    , 45: { background: 'magenta' }
+    , 46: { background: 'cyan' }
+    , 47: { background: 'white' }
+    , 49: { background: null }
+    }
+
+    function style(props) {
+      let style = []
+      for (let key in props) {
+        const val = props[key]
+        if (val) style.push(stylemap[key] + ':' + (val == true ? key : val))
+      }
+      return style.join(';')
+    }
+
+    let props = {}, open = false
+
+    function open_close_tags(code) {
+      let html = ''
+      if (open) html += '</span>'
+      open = false
+
+      let props_ = code2props[code]
+      if (props_) {
+        props = { ...props, ...props_ }
+        html += '<span style="' + style(props) + '">'
+        open = true
+      } else {
+        props = {}
+      }
+      return html
+    }
+
+    return str.replace(/\[(\d+;)?(\d+)*m/g, (_match, b1, b2) => (
+      open_close_tags(parseInt(b1)) + open_close_tags(b2 == '' || b2 == null ? 0 : parseInt(b2))
+    )) + open_close_tags()
+  }
+</script>
+
+</body>
+</html>
