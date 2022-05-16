@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html>
+    
+<!--
+  Usages:
+     jq -C . /tmp/t.json | base64 | xclip -selection clipboard
+     git alias 
+        diff-b64 = "!f() { git diff --color $@ | base64 -w0 && echo; }; f"
+-->
+    
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
