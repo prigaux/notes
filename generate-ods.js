@@ -3,6 +3,9 @@
 
 import { makeZip } from "https://cdn.jsdelivr.net/npm/client-zip/index.js"
 
+const XML_CHAR_MAP = { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;', "'": '&apos;' }
+const escapeXml = (unsafe) => unsafe.replace(/[<>&"]/g, c => XML_CHAR_MAP[c])
+
 async function export_spreadsheet_raw(table_rows) {
     const mimetype = "application/vnd.oasis.opendocument.spreadsheet"
 
@@ -63,14 +66,14 @@ ${table_rows}
 
 async function export_spreadsheet(data) {
     const format_table_cell_header = txt => (
-        `      <table:table-cell table:style-name="mytitle"><text:p>${txt}</text:p></table:table-cell>`
+        `      <table:table-cell table:style-name="mytitle"><text:p>${escapeXml(txt)}</text:p></table:table-cell>`
     )
     const format_table_cell = cell => (
       typeof cell === 'number' ?
         `      <table:table-cell office:value-type="float" office:value="${cell}" />` :
       cell instanceof Date ?
         `      <table:table-cell office:value-type="date" office:date-value="${cell.toISOString()}" table:style-name="mydate" />` :
-        `      <table:table-cell office:value-type="string" office:string-value="${cell}" />`
+        `      <table:table-cell office:value-type="string" office:string-value="${escapeXml(cell)}" />`
     )
     const format_table_row = one => `
     <table:table-row>
@@ -84,6 +87,6 @@ ${Object.values(one).map(format_table_cell).join("\n")}
 }
 
 export_spreadsheet([
-    { foo: "Foo", bar: 123, day: new Date("2020-01-01") },
+    { foo: `Foo`, bar: 123, day: new Date("2020-01-01") },
     { foo: "Foo2", bar: 3.1415, day: new Date("2020-12-31 23:59:59")  },
 ])
