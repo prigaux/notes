@@ -49,18 +49,15 @@ ${table_rows}
  </office:body>
 </office:document-content>` },
     ]
-    //console.log(entries[2].input)
 
     const headers = { "Content-Type": mimetype } // , "Content-Disposition": "attachment"
     const blob = await new Response(makeZip(entries), { headers }).blob()
   
-    // make and click a temporary link to download the Blob
     const link = document.createElement("a")
     link.href = URL.createObjectURL(blob)
     link.download = "export.ods"
     link.click()
     link.remove()
-
     // in real life, don't forget to revoke your Blob URLs if you use them
 }
 
