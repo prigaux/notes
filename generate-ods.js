@@ -4,7 +4,6 @@
 import { makeZip } from "https://cdn.jsdelivr.net/npm/client-zip/index.js"
 
 async function export_spreadsheet_raw(table_rows) {
-    console.log(table_rows)
     const mimetype = "application/vnd.oasis.opendocument.spreadsheet"
 
     const entries = [
@@ -26,16 +25,14 @@ async function export_spreadsheet_raw(table_rows) {
     xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
     xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0">
  <office:automatic-styles>
-  <style:style style:name="mydate" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="mydate_"/>
+  <style:style style:name="mydate" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="DD_MM_YYYY_"/>
   <style:style style:name="mytitle" style:family="table-cell" style:parent-style-name="Default">
    <style:paragraph-properties fo:text-align="center"/>
    <style:text-properties fo:font-weight="bold"/>
   </style:style>
-  <number:date-style style:name="mydate_" number:automatic-order="true">
-   <number:day number:style="long"/>
-   <number:text>/</number:text>
-   <number:month number:style="long"/>
-   <number:text>/</number:text>
+  <number:date-style style:name="DD_MM_YYYY_" number:automatic-order="true">
+   <number:day number:style="long"/> <number:text>/</number:text> 
+   <number:month number:style="long"/> <number:text>/</number:text> 
    <number:year number:style="long"/>
   </number:date-style>
  </office:automatic-styles>
@@ -50,15 +47,18 @@ ${table_rows}
 </office:document-content>` },
     ]
 
-    const headers = { "Content-Type": mimetype } // , "Content-Disposition": "attachment"
-    const blob = await new Response(makeZip(entries), { headers }).blob()
+    const blob = await new Response(
+        makeZip(entries), 
+        { headers: { "Content-Type": mimetype } }
+    ).blob()
   
+    // make and click a temporary link to download the Blob
     const link = document.createElement("a")
     link.href = URL.createObjectURL(blob)
     link.download = "export.ods"
+    link.onload = () => URL.revokeObjectURL(link.href)
     link.click()
     link.remove()
-    // in real life, don't forget to revoke your Blob URLs if you use them
 }
 
 async function export_spreadsheet(data) {
