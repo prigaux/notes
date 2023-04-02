@@ -10,7 +10,8 @@ async function export_spreadsheet_raw(table_rows) {
     const mimetype = "application/vnd.oasis.opendocument.spreadsheet"
 
     const entries = [
-        { name: "mimetype", input: mimetype },    
+        { name: "mimetype", input: mimetype },
+        { name: 'META-INF/', input: undefined }, // needed to be compliant with Microsoft Office 
         { name: "META-INF/manifest.xml", input :
 `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">
