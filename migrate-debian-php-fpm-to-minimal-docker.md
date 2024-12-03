@@ -5,18 +5,6 @@ Here is a minimal migration from debian host PHP-FPM to docker, with
 
 Full example:
 
-### disable docker bridge
-
-([ref](https://stackoverflow.com/questions/52146056/how-to-delete-disable-docker0-bridge-on-docker-startup))
-
-create /etc/docker/daemon.json :
-```json
-{
-    "iptables": false,
-    "bridge": "none"
-}
-```
-
 ### Dockerfile
 
 ```Dockerfile 
