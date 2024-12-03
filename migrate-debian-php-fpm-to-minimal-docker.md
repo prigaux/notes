@@ -41,7 +41,7 @@ pm.max_spare_servers = 3
 (with [container using host user](https://medium.com/faun/set-current-host-user-for-docker-container-4e521cef9ffc))
 
 ```sh
-docker build --network=host -t foo .
+docker build --pull -t foo .
 
 # ensure directories exist
 install -d -o fpm /webhome/foo/.run /var/lib/php/sessions-foo
