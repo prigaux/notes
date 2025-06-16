@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        input[name=givenName] { background: #afa }
+        input[name=familyName] { background: #aaf }
+        input[name=email], input[type=email] { background: #faa }
+    </style>
+
+    <br>name=givenName name=familyName name=email<br>
+
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <input name="email">
+    </form>
+
+    <br>pareil avec type=email<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <input name="foo" type="email">
+    </form>
+
+    <br>pareil avec type=email & label "Courriel"<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <label>Courriel<input name="foo" type="email"></label>
+    </form>
+
+    <br>avec name="sn" & label "Nom"<br>
+    <form>
+        <input name="givenName" autocomplete="given-name">
+        <label>Nom ...<input name="sn"></label>
+        <label>Nom ...<input name="xxx"></label>
+        <input name="email" autocomplete="email">
+    </form>
+
+    <br>avec name="sn" & label "Votre nom"<br>
+    <form>
+        <input name="givenName" autocomplete="given-name">
+        <label>Votre nom ...<input name="sn"></label>
+        <label>Votre nom ...<input name="xxx"></label>
+        <input name="email" autocomplete="email">
+    </form>
+
+    <br>avec name="sn" & label "Nom" & champs autocomplete & champs autocomplete="url"<br>
+    <form>
+        <input name="givenName" autocomplete="given-name">
+        <label>Nom ...<input name="sn" autocomplete="family-name"></label>
+        <label>Nom ...<input name="xxx" autocomplete="url"></label>
+        <input name="email" autocomplete="email">
+    </form>
+    
+    <br>avec name="sn" & label "Votre nom" & champs autocomplete<br>
+    <form>
+        <input name="givenName" autocomplete="given-name">
+        <label>Votre nom ...<input name="sn" autocomplete="family-name"></label>
+        <label>Votre nom de naissance<input name="xxx"></label>
+        <input name="email" autocomplete="email">
+    </form>
+    
+    <br>name="name" => Firefox met une 2eme fois le prénom ou met "prénom nom". Chrome met parfois le prénom<br>
+    prénom après 2 champs<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <input name="name">
+        <input name="email">
+    </form>
+    avant les autres champs<br>
+    <form>
+        <input name="name">
+        <input name="givenName">
+        <input name="familyName">
+        <input name="email">
+    </form>
+    après un champ inconnu<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <input name="xxxx">
+        <input name="name">
+        <input name="email">
+    </form>
+
+    <br>autocomplete="name" => Firefox/Chrome mettent "prénom nom"<br>
+    <form>
+        <input autocomplete="given-name">
+        <input autocomplete="family-name">
+        <input autocomplete="name">
+        <input autocomplete="email">
+    </form>
+
+    <br>label "Nom de" => Firefox met "prénom" ou "prénom nom" selon l'ordre. Chrome met le prénom<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <label>Nom de<input name="xxx2"></label>
+        <input name="email">
+    </form>
+  
+    <br>label "<tt>&lt;span&gt;Nom&lt;/span&gt; de</tt>" => Firefox ne détecte plus. Chrome met le prénom<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <label><span>Nom</span> de<input name="xxx2"></label>
+        <input name="email">
+    </form>
+
+    <br>label "<tt>&lt;span&gt;Nom&lt;/span&gt; de</tt>" et autocomplete="birth-name" => Firefox/Chrome n'autocomplete plus<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <label><span>Nom</span> de<input name="xxx2" autocomplete="birth-name"></label>
+        <input name="email">
+    </form>
+
+    <br>label "Nom de" et autocomplete="url" 😱 => Firefox/Chrome n'autocomplete plus<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <label>Nom de<input name="xxx2" autocomplete="url"></label>
+        <input name="email">
+    </form>  
+    
+</html>
