@@ -2,12 +2,33 @@
 <html>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-        input[name=givenName] { background: #afa }
-        input[name=familyName] { background: #aaf }
-        input[name=email], input[type=email] { background: #faa }
+        html { padding: 1rem; }
+        input[autocomplete] { background: #ffe }
+        input[name=givenName] { background: #dfd }
+        input[name=familyName] { background: #ddf }
+        input[name=email], input[type=email] { background: #fdd }
     </style>
 
-    <br>name=givenName name=familyName name=email<br>
+    <br>test autocomplete seuls => pour autocomplete="name", Firefox/Chrome mettent "prénom nom" et Safari ne fait rien (!)<br>
+    <form>
+        <input name="x1" autocomplete="given-name">
+        <input name="x2" autocomplete="family-name">
+        <input name="x3" autocomplete="name">
+        <input name="x4" autocomplete="email">
+        <input name="x5" autocomplete="bday">
+    </form>
+
+    <br>avec des autocomplete et labels<br>
+    <form>
+        <label>Prénom<input name="givenName" autocomplete="given-name"></label>
+        <label>Nom<input name="familyName" autocomplete="family-name"></label>
+        <label>Nom de naissance<input name="birthName" type="text" autocomplete="birth-name"></label>
+        <label>Date de naissance<input type="date" name="birthDate" autocomplete="bday"></label>
+        <label>Mail<input name="email" type="email" autocomplete="email"></label>
+        <label>Téléphone<input name="phone" autocomplete="tel"></label>
+    </form>
+
+    <br>name=givenName name=familyName name=email => Safari met le nom complet dans familyName !<br>
 
     <form>
         <input name="givenName">
@@ -15,21 +36,21 @@
         <input name="email">
     </form>
 
-    <br>pareil avec type=email<br>
+    <br>pareil avec type=email => Chrome/Safari ne font rien<br>
     <form>
         <input name="givenName">
         <input name="familyName">
         <input name="foo" type="email">
     </form>
 
-    <br>pareil avec type=email & label "Courriel"<br>
+    <br>pareil avec type=email & label "Courriel" => Safari autocomplete<br>
     <form>
         <input name="givenName">
         <input name="familyName">
         <label>Courriel<input name="foo" type="email"></label>
     </form>
 
-    <br>avec name="sn" & label "Nom"<br>
+    <br>avec name="sn" & label "Nom" => Firefox met le nom complet deux fois, Safari met le nom deux fois, Chrome met nom puis prénom une 2e fois<br>
     <form>
         <input name="givenName" autocomplete="given-name">
         <label>Nom ...<input name="sn"></label>
@@ -37,7 +58,7 @@
         <input name="email" autocomplete="email">
     </form>
 
-    <br>avec name="sn" & label "Votre nom"<br>
+    <br>avec name="sn" & label "Votre nom" => Firefox n'autocomplete plus rien, Chromium n'autocomplete pas les champs "Votre nom", Safari inchangé<br>
     <form>
         <input name="givenName" autocomplete="given-name">
         <label>Votre nom ...<input name="sn"></label>
@@ -52,16 +73,10 @@
         <label>Nom ...<input name="xxx" autocomplete="url"></label>
         <input name="email" autocomplete="email">
     </form>
-    
-    <br>avec name="sn" & label "Votre nom" & champs autocomplete<br>
-    <form>
-        <input name="givenName" autocomplete="given-name">
-        <label>Votre nom ...<input name="sn" autocomplete="family-name"></label>
-        <label>Votre nom de naissance<input name="xxx"></label>
-        <input name="email" autocomplete="email">
-    </form>
-    
-    <br>name="name" => Firefox met une 2eme fois le prénom ou met "prénom nom". Chrome met parfois le prénom<br>
+
+    <br><hr>
+
+    <br>name="name" => Firefox met une 2eme fois le prénom ou met "prénom nom". Chrome met parfois le prénom. Safari met le nom complet<br>
     prénom après 2 champs<br>
     <form>
         <input name="givenName">
@@ -85,44 +100,51 @@
         <input name="email">
     </form>
 
-    <br>autocomplete="name" => Firefox/Chrome mettent "prénom nom"<br>
-    <form>
-        <input autocomplete="given-name">
-        <input autocomplete="family-name">
-        <input autocomplete="name">
-        <input autocomplete="email">
-    </form>
+    <br><hr>
 
-    <br>label "Nom de" => Firefox met "prénom" ou "prénom nom" selon l'ordre. Chrome met le prénom<br>
+    <br>label "Nom de naissance" => Firefox met "prénom" ou "prénom nom" selon l'ordre. Chrome met le prénom. Safari met la date de naissance !<br>
     <form>
         <input name="givenName">
         <input name="familyName">
-        <label>Nom de<input name="xxx2"></label>
+        <label>Nom de naissance<input name="xxx2"></label>
+        <label>Date de naissance<input type="date" name="birthDate"></label>
         <input name="email">
     </form>
   
-    <br>label "<tt>&lt;span&gt;Nom&lt;/span&gt; de</tt>" => Firefox ne détecte plus. Chrome met le prénom<br>
+    <br>label "<tt>&lt;span&gt;Nom&lt;/span&gt; de</tt>" => Firefox ne détecte plus. Chrome/Safari inchangés<br>
     <form>
         <input name="givenName">
         <input name="familyName">
-        <label><span>Nom</span> de<input name="xxx2"></label>
+        <label><span>Nom</span> de naissance<input name="xxx2"></label>
+        <label>Date de naissance<input type="date" name="birthDate"></label>
         <input name="email">
     </form>
 
-    <br>label "<tt>&lt;span&gt;Nom&lt;/span&gt; de</tt>" et autocomplete="birth-name" => Firefox/Chrome n'autocomplete plus<br>
+    <br>label "Nom de naissance" et autocomplete="birth-name" => Chrome n'autocomplete plus. Firefox/Safari inchangés<br>
     <form>
         <input name="givenName">
         <input name="familyName">
-        <label><span>Nom</span> de<input name="xxx2" autocomplete="birth-name"></label>
+        <label>Nom de naissance<input name="xxx2" autocomplete="birth-name"></label>
+        <label>Date de naissance<input type="date" name="birthDate"></label>
+        <input name="email">
+    </form>
+  
+    <br>label avec des &amp;zwnj; => Firefox/Chrome/Firefox n'autocompletent plus<br>
+    <form>
+        <input name="givenName">
+        <input name="familyName">
+        <label>N&zwnj;om de n&zwnj;aissance<input name="xxx2"></label>
+        <label>Date de naissance<input type="date" name="birthDate" autocomplete="bday"></label>
         <input name="email">
     </form>
 
-    <br>label "Nom de" et autocomplete="url" 😱 => Firefox/Chrome n'autocomplete plus<br>
+    <br>label "Nom de naissance" et autocomplete="url" 😱 => Firefox/Chrome/Safari n'autocompletent plus<br>
     <form>
         <input name="givenName">
         <input name="familyName">
-        <label>Nom de<input name="xxx2" autocomplete="url"></label>
+        <label>Nom de naissance<input name="xxx2" autocomplete="url"></label>
+        <label>Date de naissance<input type="date" name="birthDate" autocomplete="bday"></label>
         <input name="email">
     </form>  
-    
+
 </html>
