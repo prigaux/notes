@@ -66,11 +66,11 @@
         <input name="email" autocomplete="email">
     </form>
 
-    <br>avec name="sn" & label "Nom" & champs autocomplete & champs autocomplete="url"<br>
+    <br>avec name="sn" & label "Nom" & champs autocomplete & champs autocomplete="additional-name"<br>
     <form>
         <input name="givenName" autocomplete="given-name">
         <label>Nom ...<input name="sn" autocomplete="family-name"></label>
-        <label>Nom ...<input name="xxx" autocomplete="url"></label>
+        <label>Nom ...<input name="xxx" autocomplete="additional-name"></label>
         <input name="email" autocomplete="email">
     </form>
 
@@ -129,7 +129,7 @@
         <input name="email">
     </form>
   
-    <br>label avec des &amp;zwnj; => Firefox/Chrome/Firefox n'autocompletent plus<br>
+    <br>label avec des &amp;zwnj; 😱 => Firefox/Chrome/Firefox n'autocompletent plus... mais cela casse les lecteurs d'écran (accessibilité)<br>
     <form>
         <input name="givenName">
         <input name="familyName">
@@ -138,11 +138,11 @@
         <input name="email">
     </form>
 
-    <br>label "Nom de naissance" et autocomplete="url" 😱 => Firefox/Chrome/Safari n'autocompletent plus<br>
+    <br>label "Nom de naissance" et autocomplete="additional-name" 😱 => Firefox/Chrome/Safari n'autocompletent plus... mais Safari peut mettre le 2eme prénom<br>
     <form>
         <input name="givenName">
         <input name="familyName">
-        <label>Nom de naissance<input name="xxx2" autocomplete="url"></label>
+        <label>Nom de naissance<input name="xxx2" autocomplete="additional-name"></label>
         <label>Date de naissance<input type="date" name="birthDate" autocomplete="bday"></label>
         <input name="email">
     </form>  

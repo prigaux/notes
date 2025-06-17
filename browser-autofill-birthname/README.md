@@ -12,7 +12,8 @@ If `<label>` contains "Name" (or "Nom" en français), Safari will autofill as if
   * `<input autocomplete="off">` does not work 😭
   * either ensure the `<label>` does not contain with "Name" or "birth" 🤪
   * or use a mostly unused `autocomplete` value, for example `autocomplete="url"`
-  * or put `&zwnj;` ("zero width non-joiner") inside the `<label>` words (but beware of `placeholder`s too)
+  * or put `&zwnj;` ("zero width non-joiner") inside the `<label>` words (but beware of `placeholder`s too, and screen readers spell the words...)
+  * or use `autocomplete="family-name"`, which can be wrong, but not too bad
 
 Ref: https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill https://stackoverflow.com/questions/15738259/disabling-chrome-autofill/30976223 https://stackoverflow.com/questions/43058018/how-to-disable-autocomplete-in-address-fields-for-safari
 
