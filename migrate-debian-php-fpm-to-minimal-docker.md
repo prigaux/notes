@@ -91,6 +91,25 @@ or create `/etc/php/7.0/fpm/conf.d/docker-reenable-sessions-gc.ini` with
 [Sessions]
 session.gc_probability = 1
 ```
+#### host cron using docker exec or docker run
+
+replace 
+```
+5 * * * * /usr/bin/php ...
+```
+with
+```
+5 * * * * /usr/bin/docker exec foo php ...
+```
+(where "foo" is the name of the container running PHP-FPM)
+or with
+```
+5 * * * * /usr/bin/docker run --volume ... --rm --entrypoint=php up1-stats ...
+```
+(where "foo" is the name of the image containing PHP-FPM & PHP-cli)
+
+NB: it needs to be run as root
+
 
 ### mails
 
